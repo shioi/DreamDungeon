@@ -1,7 +1,9 @@
 mod camera;
+mod component;
 mod map;
 mod map_builder;
-mod player;
+mod spawner;
+mod systems;
 
 mod prelude {
     pub use bracket_lib::prelude::*;
@@ -10,27 +12,37 @@ mod prelude {
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH / 2;
     pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT / 2;
     pub use crate::camera::*;
+    pub use crate::component::*;
     pub use crate::map::*;
     pub use crate::map_builder::*;
-    pub use crate::player::*;
+    pub use crate::spawner::*;
+    pub use crate::systems::*;
+    pub use legion::systems::CommandBuffer;
+    pub use legion::world::SubWorld;
+    pub use legion::*;
 }
 
 use prelude::*;
 
 struct State {
-    map: Map,
-    player: Player,
-    camera: Camera,
+    ecs: World,
+    resources: Resources,
+    systems: Schedule,
 }
 
 impl State {
     fn new() -> Self {
+        let mut ecs = World::default();
+        let mut resources = Resources::default();
         let mut rng = RandomNumberGenerator::new();
         let map_builder = MapBuilder::new(&mut rng);
+        spawn_player(&mut ecs, map_builder.player_start);
+        resources.insert(map_builder.map);
+        resources.insert(Camera::new(map_builder.player_start));
         Self {
-            map: map_builder.map,
-            player: Player::new(map_builder.player_start),
-            camera: Camera::new(map_builder.player_start),
+            ecs,
+            resources,
+            systems: build_scheduler(),
         }
     }
 }
@@ -41,13 +53,14 @@ impl GameState for State {
         ctx.cls();
         ctx.set_active_console(1);
         ctx.cls();
-        self.player.update(ctx, &self.map, &mut self.camera);
-        self.map.render(ctx, &mut self.camera);
-        self.player.render(ctx, &mut self.camera);
+        self.resources.insert(ctx.key);
+        self.systems.execute(&mut self.ecs, &mut self.resources);
+        render_draw_buffer(ctx).expect("Render Error");
     }
 }
 
 fn main() -> BError {
+    embedded_resource!(TERMINAL_FONT, "../resources/dungeonfont.png");
     let context = BTermBuilder::new()
         .with_title("Dream Dungeon")
         .with_fps_cap(30.0)
