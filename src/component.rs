@@ -28,3 +28,7 @@ pub struct Health {
     pub current: i32,
     pub max: i32,
 }
+
+//for names on top of enemies head
+#[derive(Clone, PartialEq)]
+pub struct Name(pub String);
