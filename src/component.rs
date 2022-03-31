@@ -21,4 +21,3 @@ pub struct WantsToMove {
     pub entity: Entity,
     pub destination: Point,
 }
-
