@@ -32,3 +32,11 @@ pub struct Health {
 //for names on top of enemies head
 #[derive(Clone, PartialEq)]
 pub struct Name(pub String);
+
+//for attack
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct WantsToAttack {
+    pub attacker: Entity,
+    pub victim: Entity,
+}
