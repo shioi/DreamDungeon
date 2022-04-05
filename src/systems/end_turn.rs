@@ -25,5 +25,5 @@ pub fn end_turn(ecs: &SubWorld, #[resource] turn_state: &mut TurnState) {
             new_state = TurnState::Victory;
         }
     });
-    *turn_state = new_state;
+    *turn_state = new_state; //final change
 }

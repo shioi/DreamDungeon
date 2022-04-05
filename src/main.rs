@@ -93,6 +93,7 @@ impl State {
         //TODO: put menu here
         if let Some(VirtualKeyCode::Key1) = ctx.key {
             self.reset_game_state();
+            //todo: fn menu ->
         }
     }
 
@@ -149,7 +150,7 @@ impl GameState for State {
 }
 
 fn main() -> BError {
-    let fontname: &str = "dungeonfont.png";
+    let fontname: &str = "Sir_Henry's_32x32.png";
     let context = BTermBuilder::new()
         .with_title("Dream Dungeon")
         .with_fps_cap(30.0)
