@@ -44,11 +44,9 @@ impl State {
         spawn_amulet_of_yala(&mut ecs, map_builder.amulet_start);
         spawn_amulet_of_yala(&mut ecs, map_builder.amulet_start);
         map_builder
-            .rooms
+            .monster_spawns
             .iter()
-            .skip(1)
-            .map(|r| r.center())
-            .for_each(|pos| spawn_monster(&mut ecs, &mut rng, pos));
+            .for_each(|pos| spawn_monster(&mut ecs, &mut rng, *pos));
         resources.insert(map_builder.map);
         resources.insert(Camera::new(map_builder.player_start));
         resources.insert(TurnState::AwaitingInput);
@@ -68,11 +66,9 @@ impl State {
         let map_builder = MapBuilder::new(&mut rng);
         spawn_player(&mut self.ecs, map_builder.player_start);
         map_builder
-            .rooms
+            .monster_spawns
             .iter()
-            .skip(1)
-            .map(|r| r.center())
-            .for_each(|pos| spawn_monster(&mut self.ecs, &mut rng, pos));
+            .for_each(|pos| spawn_monster(&mut self.ecs, &mut rng, *pos));
         self.resources.insert(map_builder.map);
         self.resources.insert(Camera::new(map_builder.player_start));
         self.resources.insert(TurnState::AwaitingInput);
@@ -150,12 +146,12 @@ impl GameState for State {
 }
 
 fn main() -> BError {
-    let fontname: &str = "Vidumec_15x15.png";
+    let fontname: &str = "Talryth_square_15x15.png";
     let context = BTermBuilder::new()
         .with_title("Dream Dungeon")
         .with_fps_cap(30.0)
         .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT)
-        .with_tile_dimensions(32, 32)
+        .with_tile_dimensions(15, 15)
         .with_resource_path("resources/")
         .with_font(fontname, 15, 15)
         .with_font("terminal8x8.png", 8, 8)

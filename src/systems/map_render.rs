@@ -19,12 +19,12 @@ pub fn map_render(#[resource] map: &Map, #[resource] camera: &Camera, ecs: &SubW
                 match map.tiles[idx] {
                     TileType::Floor => {
                         let tint = if player_fov.visible_tiles.contains(&pt) {
-                            GREEN
+                            WHITE
                         } else {
-                            DARK_GREEN
+                            DARK_GRAY
                         };
 
-                        draw_batch.set(pt - offset, ColorPair::new(tint, DARK_BLUE), to_cp437('.'));
+                        draw_batch.set(pt - offset, ColorPair::new(tint, BLACK), to_cp437('.'));
                     }
                     TileType::Wall => {
                         let tint = if player_fov.visible_tiles.contains(&pt) {
