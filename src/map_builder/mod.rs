@@ -6,6 +6,8 @@ mod room;
 use room::RoomsArchitect;
 mod automata;
 use automata::CellularAutomataArchitect;
+mod drunkard;
+use drunkard::DrunkardWalkArchitect;
 
 trait MapArchitect {
     fn new(&mut self, rng: &mut RandomNumberGenerator) -> MapBuilder;
@@ -21,7 +23,7 @@ pub struct MapBuilder {
 
 impl MapBuilder {
     pub fn new(rng: &mut RandomNumberGenerator) -> Self {
-        let mut architect = CellularAutomataArchitect {};
+        let mut architect = DrunkardWalkArchitect {};
         architect.new(rng)
     }
 
