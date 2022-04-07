@@ -1,3 +1,5 @@
+use std::cell::Cell;
+
 use crate::prelude::*;
 const NUM_ROOMS: usize = 20;
 mod empty;
@@ -23,7 +25,11 @@ pub struct MapBuilder {
 
 impl MapBuilder {
     pub fn new(rng: &mut RandomNumberGenerator) -> Self {
-        let mut architect = DrunkardWalkArchitect {};
+        let mut architect: Box<dyn MapArchitect> = match rng.range(0, 3) {
+            0 => Box::new(DrunkardWalkArchitect {}),
+            1 => Box::new(RoomsArchitect {}),
+            _ => Box::new(CellularAutomataArchitect {}),
+        };
         architect.new(rng)
     }
 
