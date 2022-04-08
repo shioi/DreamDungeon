@@ -46,7 +46,7 @@ impl State {
         map_builder
             .monster_spawns
             .iter()
-            .for_each(|pos| spawn_monster(&mut ecs, &mut rng, *pos));
+            .for_each(|pos| spawn_entity(&mut ecs, &mut rng, *pos));
         resources.insert(map_builder.map);
         resources.insert(Camera::new(map_builder.player_start));
         resources.insert(TurnState::AwaitingInput);
@@ -69,7 +69,7 @@ impl State {
         map_builder
             .monster_spawns
             .iter()
-            .for_each(|pos| spawn_monster(&mut self.ecs, &mut rng, *pos));
+            .for_each(|pos| spawn_entity(&mut self.ecs, &mut rng, *pos));
         self.resources.insert(map_builder.map);
         self.resources.insert(Camera::new(map_builder.player_start));
         self.resources.insert(TurnState::AwaitingInput);
@@ -148,14 +148,14 @@ impl GameState for State {
 }
 
 fn main() -> BError {
-    let fontname: &str = "Talryth_square_15x15.png";
+    let fontname: &str = "dungeonfont.png";
     let context = BTermBuilder::new()
         .with_title("Dream Dungeon")
         .with_fps_cap(30.0)
         .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT)
-        .with_tile_dimensions(15, 15)
+        .with_tile_dimensions(32, 32)
         .with_resource_path("resources/")
-        .with_font(fontname, 15, 15)
+        .with_font(fontname, 32, 32)
         .with_font("terminal8x8.png", 8, 8)
         .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, fontname)
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, fontname)
