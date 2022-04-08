@@ -90,3 +90,9 @@ pub struct ProvideDungeonMap;
 //items is in inventory component
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Carried(pub Entity);
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ActivateItem {
+    pub used_by: Entity,
+    pub item: Entity,
+}
