@@ -86,3 +86,7 @@ pub struct ProvideHealing {
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct ProvideDungeonMap;
+
+//items is in inventory component
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Carried(pub Entity);
