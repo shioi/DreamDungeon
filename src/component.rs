@@ -77,3 +77,12 @@ impl FieldOfView {
         }
     }
 }
+
+//for items
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProvideHealing {
+    pub amount: i32,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProvideDungeonMap;
