@@ -26,8 +26,6 @@ mod prelude {
     pub use legion::*;
 }
 
-use std::ops::Add;
-
 use prelude::*;
 
 struct State {
@@ -48,10 +46,9 @@ impl State {
         //        spawn_amulet_of_yala(&mut ecs, map_builder.amulet_start);
         let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
         map_builder.map.tiles[exit_idx] = TileType::Exit;
-        map_builder
-            .monster_spawns
-            .iter()
-            .for_each(|pos| spawn_entity(&mut ecs, &mut rng, *pos));
+
+        spawn_level(&mut ecs, &mut rng, 0, &map_builder.monster_spawns);
+
         resources.insert(map_builder.map);
         resources.insert(Camera::new(map_builder.player_start));
         resources.insert(TurnState::AwaitingInput);
@@ -71,10 +68,7 @@ impl State {
         let mut rng = RandomNumberGenerator::new();
         let map_builder = MapBuilder::new(&mut rng);
         spawn_player(&mut self.ecs, map_builder.player_start);
-        map_builder
-            .monster_spawns
-            .iter()
-            .for_each(|pos| spawn_entity(&mut self.ecs, &mut rng, *pos));
+        spawn_level(&mut self.ecs, &mut rng, 0, &map_builder.monster_spawns);
         self.resources.insert(map_builder.map);
         self.resources.insert(Camera::new(map_builder.player_start));
         self.resources.insert(TurnState::AwaitingInput);
@@ -163,10 +157,13 @@ impl State {
             let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
             map_builder.map.tiles[exit_idx] = TileType::Exit;
         }
-        map_builder
-            .monster_spawns
-            .iter()
-            .for_each(|pos| spawn_entity(&mut self.ecs, &mut rng, *pos));
+
+        spawn_level(
+            &mut self.ecs,
+            &mut rng,
+            map_level as usize,
+            &map_builder.monster_spawns,
+        );
 
         self.resources.insert(map_builder.map);
         self.resources.insert(Camera::new(map_builder.player_start));
@@ -215,14 +212,14 @@ impl GameState for State {
 }
 
 fn main() -> BError {
-    let fontname: &str = "dungeonfont.png";
+    let fontname: &str = "Cheepicus_15x15.png";
     let context = BTermBuilder::new()
         .with_title("Dream Dungeon")
         .with_fps_cap(30.0)
         .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT)
-        .with_tile_dimensions(32, 32)
+        .with_tile_dimensions(15, 15)
         .with_resource_path("resources/")
-        .with_font(fontname, 32, 32)
+        .with_font(fontname, 15, 15)
         .with_font("terminal8x8.png", 8, 8)
         .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, fontname)
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, fontname)
