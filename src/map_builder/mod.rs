@@ -2,8 +2,6 @@ use std::cell::Cell;
 
 use crate::prelude::*;
 const NUM_ROOMS: usize = 20;
-mod empty;
-use empty::EmptyArchitect;
 mod room;
 use room::RoomsArchitect;
 mod automata;
