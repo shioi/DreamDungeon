@@ -213,7 +213,7 @@ impl GameState for State {
 
 fn main() -> BError {
     let fontname: &str = "Cheepicus_15x15.png";
-    let context = BTermBuilder::new()
+    let mut context = BTermBuilder::new()
         .with_title("Dream Dungeon")
         .with_fps_cap(30.0)
         .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT)
@@ -225,6 +225,7 @@ fn main() -> BError {
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, fontname)
         .with_simple_console_no_bg(SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, "terminal8x8.png")
         .build()?;
+    context.with_post_scanlines(true);
 
     main_loop(context, State::new())
 }
