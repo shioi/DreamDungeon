@@ -212,20 +212,19 @@ impl GameState for State {
 }
 
 fn main() -> BError {
-    let fontname: &str = "Cheepicus_15x15.png";
+    let fontname: &str = "testtile.png";
     let mut context = BTermBuilder::new()
         .with_title("Dream Dungeon")
         .with_fps_cap(30.0)
         .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT)
-        .with_tile_dimensions(15, 15)
+        .with_tile_dimensions(32, 32)
         .with_resource_path("resources/")
-        .with_font(fontname, 15, 15)
+        .with_font(fontname, 32, 32)
         .with_font("terminal8x8.png", 8, 8)
         .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, fontname)
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, fontname)
         .with_simple_console_no_bg(SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, "terminal8x8.png")
         .build()?;
-    context.with_post_scanlines(true);
 
     main_loop(context, State::new())
 }
