@@ -51,7 +51,7 @@ impl State {
 
         resources.insert(map_builder.map);
         resources.insert(Camera::new(map_builder.player_start));
-        resources.insert(TurnState::AwaitingInput);
+        resources.insert(TurnState::MainMenu);
         resources.insert(map_builder.theme);
         Self {
             ecs,
@@ -59,6 +59,22 @@ impl State {
             input_systems: build_input_scheduler(),
             player_systems: build_player_scheduler(),
             monster_systems: build_monster_scheduler(),
+        }
+    }
+
+    fn main_menu(&mut self, ctx: &mut BTerm) {
+        ctx.set_active_console(0);
+        ctx.draw_hollow_box(5, 10, 30, 10, WHITE, WHITE);
+        ctx.print_color_centered(8, RED, BLACK, "Main Menu");
+        ctx.print_color_centered(12, GREEN, BLACK, "PLAY(P)");
+        ctx.print_color_centered(14, RED, BLACK, "QUIT(Q)");
+
+        if let Some(key) = ctx.key {
+            match key {
+                VirtualKeyCode::P => self.reset_game_state(),
+                VirtualKeyCode::Q => ctx.quitting = true,
+                _ => {}
+            }
         }
     }
 
@@ -204,6 +220,10 @@ impl GameState for State {
             }
             TurnState::NextLevel => {
                 self.advance_level();
+            } //TODO: define new state as main menu
+            //todo: call the menu scheduler here
+            TurnState::MainMenu => {
+                self.main_menu(ctx);
             }
         }
 
@@ -212,19 +232,19 @@ impl GameState for State {
 }
 
 fn main() -> BError {
-    let fontname: &str = "testtile.png";
+    let fontname: &str = "Cheepicus_8x8x2.png";
     let mut context = BTermBuilder::new()
         .with_title("Dream Dungeon")
         .with_fps_cap(30.0)
         .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT)
         .with_tile_dimensions(32, 32)
         .with_resource_path("resources/")
-        .with_font(fontname, 32, 32)
+        .with_font(fontname, 16, 16)
         .with_font("terminal8x8.png", 8, 8)
         .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, fontname)
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, fontname)
         .with_simple_console_no_bg(SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, "terminal8x8.png")
         .build()?;
-
+    context.with_post_scanlines(true);
     main_loop(context, State::new())
 }

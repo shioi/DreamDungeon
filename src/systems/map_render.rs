@@ -22,9 +22,9 @@ pub fn map_render(
                 && (player_fov.visible_tiles.contains(&pt) | map.revealed_tiles[idx])
             {
                 let tint = if player_fov.visible_tiles.contains(&pt) {
-                    WHITE
+                    ORANGE
                 } else {
-                    DARK_GRAY
+                    CORAL
                 };
 
                 let glyph = theme.tile_to_render(map.tiles[idx]);

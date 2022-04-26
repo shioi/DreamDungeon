@@ -17,7 +17,7 @@ pub fn spawn_player(ecs: &mut World, pos: Point) {
         Player { map_level: 0 },
         pos,
         Render {
-            color: ColorPair::new(WHITE, BLACK),
+            color: ColorPair::new(GREEN, BLACK),
             glyph: to_cp437('@'),
         },
         Health {

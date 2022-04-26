@@ -69,7 +69,7 @@ impl Templates {
         let entity = commands.push((
             pt.clone(),
             Render {
-                color: ColorPair::new(WHITE, BLACK),
+                color: ColorPair::new(RED, BLACK),
                 glyph: to_cp437(template.glyph),
             },
             Name(template.name.clone()),
